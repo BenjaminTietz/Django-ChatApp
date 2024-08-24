@@ -7,6 +7,6 @@ from django.conf import settings
 class Message(models.Model):
     text = models.CharField(max_length=500)
     created_at = DateField(default=date.today)
-    #chat = Chat Klasse verknüpfen
+    #chat = models.ForeignKey(Chat, on_delete=models.CASCADE)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author_message_set')
     reciver = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='reciver_message_set')
