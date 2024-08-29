@@ -1,29 +1,47 @@
 {% extends "base.html" %}
 {% block content %}
 {% if request.user.is_authenticated %}
-
 {% for message in messages %}
 <div>
-    <span class="color-gray">[{{ message.created_at}}]</span> {{ message.author.first_name }}:
-    <i>{{ message.text }}</i>
+  <span class="color-gray">[{{ message.created_at}}]</span>
+  {{ message.author.first_name }}:
+  <i>{{ message.text }}</i>
 </div>
 {% endfor %}
 
-<form action="/chat/" method="post">
-    {% csrf_token %}
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <input class="mdl-textfield__input" name="textmessage" type="text" id="sample3">
-        <label class="mdl-textfield__label" for="sample3">Text...</label>
-    </div>
-    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
-        Send
-    </button>
+<script>
+  async function sendMessage() {
+    let fd = new FormData();
+    let token = '{{ csrf_token }}';
+    fd.append('textmessage', messageField.value);
+    fd.append('csrfmiddlewaretoken', token);
+    try {
+      await fetch('/chat/', {
+        method: 'POST',
+        body: fd,
+      });
+      console.log('Message sent');
+    } catch (error) {
+      console.error('An error occured while sending an message:', error);
+    }
+
+  }
+</script>
+
+<form onsubmit="sendMessage(); return false;" method="post">
+  {% csrf_token %}
+  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+    <input class="mdl-textfield__input" name="textmessage" type="text" id="messageField" />
+    <label class="mdl-textfield__label" for="messageField">Text...</label>
+  </div>
+  <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+    Send
+  </button>
 </form>
 {% else %}
 <h1>Not loggedin</h1>
 <p>
-    Currently your are not loggedin. Please login again.<br>
-    Please click <a href="/login/">here</a> to login again.
+  Currently your are not loggedin. Please login again.<br />
+  Please click <a href="/login/">here</a> to login again.
 </p>
-{% endif %}
-{% endblock %}
+{% endif %} {% endblock %}
