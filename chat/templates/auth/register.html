@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css/' %}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+    </style>
+</head>
+
+<body>
+
+    {% block content %}
+    <h2>Register</h2>
+
+    <form class="dFlex" method="POST" action="/register/">
+        {% csrf_token %}
+        <input type="hidden" name="redirect" value="{{ redirect }}">
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" name="username" type="text" id="sample3">
+            <label class="mdl-textfield__label" for="sample3">Username...</label>
+        </div>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" name="email" type="email" id="sample3">
+            <label class="mdl-textfield__label" for="sample3">EMail...</label>
+        </div>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" name="password" type="password" id="sample3">
+            <label class="mdl-textfield__label" for="sample3">Password...</label>
+        </div>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" name="confirmpassword" type="password" id="sample3">
+            <label class="mdl-textfield__label" for="sample3">Confirm password ...</label>
+        </div>
+        <div> <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+                Register
+            </button></div>
+    </form>
+
+    {% endblock %}
+</body>
+
+</html>
