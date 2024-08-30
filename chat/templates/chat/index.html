@@ -14,6 +14,8 @@
 
 <script>
   async function sendMessage() {
+    const currentDate = getFormattedCurrentDate();
+
     let fd = new FormData();
     let token = '{{ csrf_token }}';
     fd.append('textmessage', messageField.value);
@@ -31,11 +33,20 @@
       document.getElementById('deleteMessage').remove();
       messageContainer.innerHTML += `
     <div>
-      <span class="color-gray">[DATUM]</span>{{ request.user.first_name }}:<i>${messageField.value}</i>
+      <span class="color-gray">[${currentDate}]</span>{{ request.user.first_name }}:<i>${messageField.value}</i>
     </div>`;
     } catch (error) {
       console.error('An error occured while sending an message:', error);
     }
+    messageField.value = '';
+  }
+
+  //helper functions
+  function getFormattedCurrentDate() {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    let date = new Date().toLocaleDateString('en-US', options);
+    date = date.replace(/(\w{3}) (\d{1,2}), (\d{4})/, '$1. $2, $3');
+    return date;
   }
 </script>
 
