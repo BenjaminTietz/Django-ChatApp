@@ -25,10 +25,14 @@
       <span class="color-gray">[DATUM]</span>{{ request.user.first_name }}:<i class="color-gray">${messageField.value}</i>
     </div>`;
     try {
-      await fetch('/chat/', {
+      let response = await fetch('/chat/', {
         method: 'POST',
         body: fd,
       });
+      let json = await response.json();
+      parsedJson = JSON.parse(json);
+      console.log('json response is:', json);
+      console.log('parsed json response is:', parsedJson);
       console.log('Message sent');
       document.getElementById('deleteMessage').remove();
       messageContainer.innerHTML += `
