@@ -4,38 +4,63 @@
 
 <head>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/style.css/' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <style>
-    </style>
 </head>
 
 <body>
+    <script>
+        async function registerNewUser() {
+            let fd = new FormData();
+            let token = '{{ csrf_token }}';
+
+            // deactivated all inputfields
+            const formElements = document.querySelectorAll('.mdl-textfield__input');
+            formElements.forEach(element => {
+                element.disabled = true;
+            });
+
+            // removes dNone class of progressbar
+            const progressBar = document.getElementById('p2');
+            progressBar.classList.remove('dNone');
+
+            try {
+                await fetch('/register/', {
+                    method: 'POST',
+                    body: fd,
+                });
+                console.log('User registered');
+            } catch (error) {
+                console.error('An error occured while registering a new user:', error);
+            }
+        } 
+    </script>
 
     {% block content %}
     <h2>Register</h2>
 
-    <form class="dFlex" method="POST" action="/register/">
+    <form class="dFlex" method="post" onsubmit="registerNewUser(); return false;">
         {% csrf_token %}
         <input type="hidden" name="redirect" value="{{ redirect }}">
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" name="username" type="text" id="sample3">
-            <label class="mdl-textfield__label" for="sample3">Username...</label>
+            <input class="mdl-textfield__input" name="username" type="text" id="username">
+            <label class="mdl-textfield__label" for="username">Username...</label>
         </div>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" name="email" type="email" id="sample3">
-            <label class="mdl-textfield__label" for="sample3">EMail...</label>
+            <input class="mdl-textfield__input" name="email" type="email" id="email">
+            <label class="mdl-textfield__label" for="email">EMail...</label>
         </div>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" name="password" type="password" id="sample3">
-            <label class="mdl-textfield__label" for="sample3">Password...</label>
+            <input class="mdl-textfield__input" name="password" type="password" id="password">
+            <label class="mdl-textfield__label" for="password">Password...</label>
         </div>
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" name="confirmpassword" type="password" id="sample3">
-            <label class="mdl-textfield__label" for="sample3">Confirm password ...</label>
+            <input class="mdl-textfield__input" name="confirmpassword" type="password" id="confirmPassword">
+            <label class="mdl-textfield__label" for="confirmPassword">Confirm password ...</label>
         </div>
+        <div id="p2" class="mdl-progress mdl-js-progress mdl-progress__indeterminate dNone"></div>
         <div> <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
                 Register
             </button></div>
